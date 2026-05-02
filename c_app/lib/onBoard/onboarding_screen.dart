@@ -1,4 +1,5 @@
 import 'package:c_app/auth/login/login_screen.dart';
+import 'package:c_app/auth/register/register.dart';
 import 'package:flutter/material.dart';
 
 
@@ -32,7 +33,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void goToLogin() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => LoginScreen()),
+      // MaterialPageRoute(builder: (_) => RegisterScreen()),
+       MaterialPageRoute(builder: (_) => RegisterScreen()),
     );
   }
 

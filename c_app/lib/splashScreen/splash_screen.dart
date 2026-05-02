@@ -1,6 +1,7 @@
-import 'dart:async';
+import 'package:c_app/Homescreen/homescreen.dart';
 import 'package:c_app/onBoard/onboarding_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -8,17 +9,33 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final storage = FlutterSecureStorage();
+
   @override
   void initState() {
     super.initState();
+    checkLogin(); // ✅ CALL IT
+  }
 
-    /// Navigate after 2.5 seconds
-    Timer(Duration(seconds: 2), () {
+  // ✅ MOVE OUTSIDE initState
+  Future<void> checkLogin() async {
+    await Future.delayed(Duration(seconds: 2));
+
+    String? token = await storage.read(key: 'accessToken');
+
+    if (!mounted) return; // ✅ prevent crash if widget disposed
+
+    if (token != null && token.isNotEmpty) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => HomeScreen()),
+      );
+    } else {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => OnboardingScreen()),
       );
-    });
+    }
   }
 
   @override
@@ -27,8 +44,6 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-
-        /// 🔹 Gradient Background (modern)
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.black, Colors.blue.shade900],
@@ -36,16 +51,12 @@ class _SplashScreenState extends State<SplashScreen> {
             end: Alignment.bottomRight,
           ),
         ),
-
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              /// 🔹 Logo (replace with your logo)
               Image.asset("assets/logo.png", height: 100),
               SizedBox(height: 20),
-
-              /// 🔹 App Name
               Text(
                 "Codolog",
                 style: TextStyle(
@@ -54,10 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   color: Colors.white,
                 ),
               ),
-
               SizedBox(height: 10),
-
-              /// 🔹 Tagline
               Text(
                 "Build. Learn. Grow.",
                 style: TextStyle(color: Colors.white70),
