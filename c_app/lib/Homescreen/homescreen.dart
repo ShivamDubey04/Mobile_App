@@ -25,11 +25,15 @@ class _C {
 //  Data models
 // ─────────────────────────────────────────────
 class Course {
+  
   final String id, title, instructor, duration, level, category;
   final int lessons, students;
   final double rating, progress;
   final bool isNew, isTrending;
+    final String imageUrl;
+
   const Course({
+    required this.imageUrl,
     required this.id, required this.title, required this.instructor,
     required this.duration, required this.level, required this.category,
     required this.lessons, required this.students,
@@ -39,28 +43,28 @@ class Course {
 }
 
 const _kCourses = [
-  Course(id:'1', title:'Flutter Masterclass\nZero to Hero', instructor:'Rahul Sharma',
+  Course(id:'1',imageUrl: 'assets/imgs.png', title:'Flutter Masvvvterclass\nZero to Hero', instructor:'Rahul Sharma',
       duration:'24h 30m', level:'Beginner', category:'Flutter',
       lessons:148, students:12400, rating:4.9, isNew:true),
-  Course(id:'2', title:'Advanced Dart\nPatterns & Architecture', instructor:'Priya Mehta',
+  Course(id:'2',imageUrl: 'assets/imgs.png', title:'Advanced Dart\nPatterns & Architecture', instructor:'Priya Mehta',
       duration:'18h 15m', level:'Advanced', category:'Dart',
       lessons:96, students:8200, rating:4.8, isTrending:true),
-  Course(id:'3', title:'UI/UX Design\nfor Developers', instructor:'Arjun Nair',
+  Course(id:'3',imageUrl: 'assets/imgs.png', title:'UI/UX Design\nfor Developers', instructor:'Arjun Nair',
       duration:'12h 00m', level:'Intermediate', category:'Design',
       lessons:72, students:15600, rating:4.7),
-  Course(id:'4', title:'Firebase &\nBackend Integration', instructor:'Sneha Patel',
+  Course(id:'4',imageUrl: 'assets/imgs.png', title:'Firebase &\nBackend Integration', instructor:'Sneha Patel',
       duration:'16h 45m', level:'Intermediate', category:'Backend',
       lessons:88, students:9800, rating:4.8, isTrending:true),
-  Course(id:'5', title:'State Management\nComplete Guide', instructor:'Vikram Rao',
+  Course(id:'5',imageUrl: 'assets/imgs.png', title:'State Management\nComplete Guide', instructor:'Vikram Rao',
       duration:'10h 20m', level:'Advanced', category:'Flutter',
       lessons:64, students:7300, rating:4.9),
 ];
 
 const _kContinueCourses = [
-  Course(id:'2', title:'Advanced Dart\nPatterns', instructor:'Priya Mehta',
+  Course(id:'2',imageUrl: 'assets/imgs.png', title:'Advanced Dart\nPatterns', instructor:'Priya Mehta',
       duration:'18h 15m', level:'Advanced', category:'Dart',
       lessons:96, students:8200, rating:4.8, progress:0.42),
-  Course(id:'3', title:'UI/UX Design\nfor Developers', instructor:'Arjun Nair',
+  Course(id:'3',imageUrl: 'assets/imgs.png', title:'UI/UX Design\nfor Developers', instructor:'Arjun Nair',
       duration:'12h 00m', level:'Intermediate', category:'Design',
       lessons:72, students:15600, rating:4.7, progress:0.78),
 ];
@@ -515,24 +519,82 @@ class _FeaturedCard extends StatelessWidget {
           border: Border.all(color: _C.border, width: 1)),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         // Thumbnail
-        Container(
-          height: 110,
-          decoration: BoxDecoration(
-              color: _C.surface,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(15))),
-          child: Stack(children: [
-            Center(child: Icon(Icons.play_circle_outline,
-                color: _C.w15, size: 48)),
-            if (course.isNew)
-              Positioned(top: 10, left: 10,
-                  child: _Badge('NEW', Colors.white, Colors.black)),
-            if (course.isTrending)
-              Positioned(top: 10, left: 10,
-                  child: _Badge('🔥 HOT', _C.surface, Colors.white)),
-            Positioned(bottom: 10, right: 10,
-                child: _DurationChip(course.duration)),
-          ]),
+Container(
+  height: 110,
+  decoration: BoxDecoration(
+    color: _C.surface,
+    borderRadius: const BorderRadius.vertical(
+      top: Radius.circular(15),
+    ),
+  ),
+  child: Stack(
+    children: [
+
+      // Course Image
+      ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(15),
         ),
+        child: Image.network(
+          course.imageUrl, // add image url in your course model
+          height: 110,
+          width: double.infinity,
+          fit: BoxFit.cover,
+        ),
+      ),
+
+      // Dark overlay (optional for better visibility)
+      Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(15),
+          ),
+          color: Colors.black.withOpacity(0.25),
+        ),
+      ),
+
+      // Play Icon
+      Center(
+        child: Icon(
+          Icons.play_circle_outline,
+          color: Colors.white,
+          size: 48,
+        ),
+      ),
+
+      // NEW Badge
+      if (course.isNew)
+        Positioned(
+          top: 10,
+          left: 10,
+          child: _Badge(
+            'NEW',
+            Colors.white,
+            Colors.black,
+          ),
+        ),
+
+      // HOT Badge
+      if (course.isTrending)
+        Positioned(
+          top: 10,
+          right: 10,
+          child: _Badge(
+            '🔥 HOT',
+            _C.surface,
+            Colors.white,
+          ),
+        ),
+
+      // Duration Chip
+      Positioned(
+        bottom: 10,
+        right: 10,
+        child: _DurationChip(course.duration),
+      ),
+    ],
+  ),
+),
         Padding(
           padding: const EdgeInsets.all(12),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
