@@ -1,8 +1,11 @@
+import 'package:c_app/auth/register/registerservice.dart';
+import 'package:c_app/course/service/ApiService.dart';
 import 'package:c_app/pages/CourseDetail/CourseDetailScreen.dart';
 import 'package:c_app/pages/Screens/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:c_app/course/model/course_model.dart';
 
 // ─────────────────────────────────────────────
 //  Design tokens
@@ -24,49 +27,69 @@ class _C {
 // ─────────────────────────────────────────────
 //  Data models
 // ─────────────────────────────────────────────
-class Course {
+// class Course {
   
-  final String id, title, instructor, duration, level, category;
-  final int lessons, students;
-  final double rating, progress;
-  final bool isNew, isTrending;
-    final String imageUrl;
+//   final String id, title, instructor, duration, level, category;
+//   final int lessons, students;
+//   final double rating, progress;
+//   final bool isNew, isTrending;
+//     final String imageUrl;
 
-  const Course({
-    required this.imageUrl,
-    required this.id, required this.title, required this.instructor,
-    required this.duration, required this.level, required this.category,
-    required this.lessons, required this.students,
-    required this.rating, this.progress = 0,
-    this.isNew = false, this.isTrending = false,
-  });
-}
+//   const Course({
+//     required this.imageUrl,
+//     required this.id, required this.title, required this.instructor,
+//     required this.duration, required this.level, required this.category,
+//     required this.lessons, required this.students,
+//     required this.rating, this.progress = 0,
+//     this.isNew = false, this.isTrending = false,
+//   });
+// }
 
 const _kCourses = [
-  Course(id:'1',imageUrl: 'assets/imgs.png', title:'Flutter Masvvvterclass\nZero to Hero', instructor:'Rahul Sharma',
-      duration:'24h 30m', level:'Beginner', category:'Flutter',
-      lessons:148, students:12400, rating:4.9, isNew:true),
-  Course(id:'2',imageUrl: 'assets/imgs.png', title:'Advanced Dart\nPatterns & Architecture', instructor:'Priya Mehta',
-      duration:'18h 15m', level:'Advanced', category:'Dart',
-      lessons:96, students:8200, rating:4.8, isTrending:true),
-  Course(id:'3',imageUrl: 'assets/imgs.png', title:'UI/UX Design\nfor Developers', instructor:'Arjun Nair',
-      duration:'12h 00m', level:'Intermediate', category:'Design',
-      lessons:72, students:15600, rating:4.7),
-  Course(id:'4',imageUrl: 'assets/imgs.png', title:'Firebase &\nBackend Integration', instructor:'Sneha Patel',
-      duration:'16h 45m', level:'Intermediate', category:'Backend',
-      lessons:88, students:9800, rating:4.8, isTrending:true),
-  Course(id:'5',imageUrl: 'assets/imgs.png', title:'State Management\nComplete Guide', instructor:'Vikram Rao',
-      duration:'10h 20m', level:'Advanced', category:'Flutter',
-      lessons:64, students:7300, rating:4.9),
+  // Course (id:'1',imageUrl: 'assets/imgs.png', title:'Flutter Masvvvterclass\nZero to Hero', instructor:'Rahul Sharma',
+  //     duration:'24h 30m', level:'Beginner', category:'Flutter',
+  //     lessons:148, students:12400, rating:4.9, isNew:true),
+  // Course(id:'2',imageUrl: 'assets/imgs.png', title:'Advanced Dart\nPatterns & Architecture', instructor:'Priya Mehta',
+  //     duration:'18h 15m', level:'Advanced', category:'Dart',
+  //     lessons:96, students:8200, rating:4.8, isTrending:true),
+  // Course(id:'3',imageUrl: 'assets/imgs.png', title:'UI/UX Design\nfor Developers', instructor:'Arjun Nair',
+  //     duration:'12h 00m', level:'Intermediate', category:'Design',
+  //     lessons:72, students:15600, rating:4.7),
+  // Course(id:'4',imageUrl: 'assets/imgs.png', title:'Firebase &\nBackend Integration', instructor:'Sneha Patel',
+  //     duration:'16h 45m', level:'Intermediate', category:'Backend',
+  //     lessons:88, students:9800, rating:4.8, isTrending:true),
+  // Course(id:'5',imageUrl: 'assets/imgs.png', title:'State Management\nComplete Guide', instructor:'Vikram Rao',
+  //     duration:'10h 20m', level:'Advanced', category:'Flutter',
+  //     lessons:64, students:7300, rating:4.9),
 ];
 
 const _kContinueCourses = [
-  Course(id:'2',imageUrl: 'assets/imgs.png', title:'Advanced Dart\nPatterns', instructor:'Priya Mehta',
-      duration:'18h 15m', level:'Advanced', category:'Dart',
-      lessons:96, students:8200, rating:4.8, progress:0.42),
-  Course(id:'3',imageUrl: 'assets/imgs.png', title:'UI/UX Design\nfor Developers', instructor:'Arjun Nair',
-      duration:'12h 00m', level:'Intermediate', category:'Design',
-      lessons:72, students:15600, rating:4.7, progress:0.78),
+  // Course(
+  //   id: '2',
+  //   imageUrl: 'assets/imgs.png',
+  //   title: 'Advanced Dart\nPatterns',
+  //   instructor: 'Priya Mehta',
+  //   duration: '18h 15m',
+  //   level: 'Advanced',
+  //   category: 'Dart',
+  //   lessons: 96,
+  //   students: 8200,
+  //   rating: 4.8,
+  //   progress: 0.42,
+  // ),
+  // Course(
+  //   id: '3',
+  //   imageUrl: 'assets/imgs.png',
+  //   title: 'UI/UX Design\nfor Developers',
+  //   instructor: 'Arjun Nair',
+  //   duration: '12h 00m',
+  //   level: 'Intermediate',
+  //   category: 'Design',
+  //   lessons: 72,
+  //   students: 15600,
+  //   rating: 4.7,
+  //   progress: 0.78,
+  // ),
 ];
 
 const _kCategories = ['All','Flutter','Dart','Design','Backend','DevOps','Python'];
@@ -78,7 +101,9 @@ class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
+  List<Course> courses = [];
 
+List<Course> allcourses = [];
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
 Widget build(BuildContext context) {
@@ -106,7 +131,12 @@ Widget build(BuildContext context) {
 
   @override
   void initState() {
+  
+
+
     super.initState();
+ fetchCourses();
+
     _headerCtrl = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 900));
     _headerFade  = CurvedAnimation(parent: _headerCtrl, curve: Curves.easeOut);
@@ -138,7 +168,24 @@ Widget build(BuildContext context) {
   //     ),
   //   );
   // }
+Future<void> fetchCourses() async {
+  try {
 
+    final data = await ApiServices().getCourses();
+
+    final newdata = await ApiServices().getAllCourses();
+
+    setState(() {
+      courses = data;
+      allcourses = newdata;
+    });
+
+    print(courses.length);
+
+  } catch (e) {
+    print(e);
+  }
+}
   // ── Bottom nav ─────────────────────────────
   Widget _buildNavBar() => Container(
     decoration: BoxDecoration(
@@ -171,7 +218,7 @@ Widget build(BuildContext context) {
       // Header
       SliverToBoxAdapter(child: _buildHeader()),
       // Continue learning
-      if (_kContinueCourses.isNotEmpty) ...[
+      if (courses.isNotEmpty) ...[
         _SectionHeader(title: 'Continue Learning', onSeeAll: () {}),
         SliverToBoxAdapter(child: _buildContinueRow()),
       ],
@@ -184,9 +231,9 @@ Widget build(BuildContext context) {
       _SectionHeader(title: 'All Courses', onSeeAll: () {}),
       SliverList(
         delegate: SliverChildBuilderDelegate(
-          (_, i) => _CourseListTile(course: _kCourses[i],
-              onTap: () => _openCourse(_kCourses[i])),
-          childCount: _kCourses.length,
+          (_, i) => _CourseListTile(course: allcourses[i],
+              onTap: () => _openCourse(allcourses[i])),
+          childCount: allcourses.length,
         ),
       ),
       const SliverToBoxAdapter(child: SizedBox(height: 24)),
@@ -303,11 +350,11 @@ Widget build(BuildContext context) {
     child: ListView.separated(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
-      itemCount: _kContinueCourses.length,
+      itemCount: courses.length,
       separatorBuilder: (_, __) => const SizedBox(width: 14),
       itemBuilder: (_, i) => _ContinueCard(
-          course: _kContinueCourses[i],
-          onTap: () => _openCourse(_kContinueCourses[i])),
+          course: courses[i],
+          onTap: () => _openCourse(courses[i])),
     ),
   );
 
@@ -344,20 +391,26 @@ Widget build(BuildContext context) {
   );
 
   // ── Featured row ──────────────────────────
-  Widget _buildFeaturedRow() => SizedBox(
-    height: 230,
-    child: ListView.separated(
-      scrollDirection: Axis.horizontal,
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
-      itemCount: _kCourses.length,
-      separatorBuilder: (_, __) => const SizedBox(width: 14),
-      itemBuilder: (_, i) => _FeaturedCard(
-          course: _kCourses[i],
-          onTap: () => _openCourse(_kCourses[i])),
-    ),
-  );
+Widget _buildFeaturedRow() => SizedBox(
+      height: 230,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
 
+        // API list length
+        itemCount: courses.length,
+
+        separatorBuilder: (_, __) => const SizedBox(width: 14),
+
+        itemBuilder: (_, i) => _FeaturedCard(
+          course: courses[i],
+
+          // open selected course
+          onTap: () => _openCourse(courses[i]),
+        ),
+      ),
+    );
   // ── My Learning tab ───────────────────────
   Widget _buildMyLearning() => CustomScrollView(
     physics: const BouncingScrollPhysics(),
@@ -466,14 +519,14 @@ class _ContinueCard extends StatelessWidget {
       width: 260,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-          color: _C.card,
+          color: const Color.fromARGB(255, 24, 39, 37),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(color: _C.border, width: 1)),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
           _CategoryBadge(course.category),
           const Spacer(),
-          Text('${(course.progress * 100).round()}%',
+          Text('${(course.rating * 100).round()}%',
               style: TextStyle(fontFamily: 'Georgia', fontSize: 11,
                   color: _C.white, fontWeight: FontWeight.w700)),
         ]),
@@ -486,7 +539,7 @@ class _ContinueCard extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(4),
           child: LinearProgressIndicator(
-            value: course.progress,
+            value: course.rating,
             backgroundColor: _C.w08,
             valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
             minHeight: 3,
@@ -663,11 +716,11 @@ class _CourseListTile extends StatelessWidget {
             Text(course.instructor, style: TextStyle(
                 fontFamily: 'Georgia', fontSize: 11, color: _C.w35)),
             const SizedBox(height: 6),
-            if (showProgress && course.progress > 0) ...[
+            if (showProgress && course.rating > 0) ...[
               ClipRRect(
                 borderRadius: BorderRadius.circular(3),
                 child: LinearProgressIndicator(
-                    value: course.progress, minHeight: 2,
+                    value: course.rating, minHeight: 2,
                     backgroundColor: _C.w08,
                     valueColor: const AlwaysStoppedAnimation<Color>(Colors.white)),
               ),

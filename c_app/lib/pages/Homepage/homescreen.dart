@@ -165,7 +165,7 @@ class HomeScreen extends StatelessWidget {
                                 top: Radius.circular(24),
                               ),
                               child: Image.network(
-                                'https://images.unsplash.com/photo-1515879218367-8466d910aaa4',
+                                'assests/imgs.png',
                                 height: 120,
                                 width: double.infinity,
                                 fit: BoxFit.cover,

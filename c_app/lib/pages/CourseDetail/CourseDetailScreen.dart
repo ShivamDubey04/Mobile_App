@@ -1,4 +1,4 @@
-import 'package:c_app/Homescreen/homescreen.dart';
+import 'package:c_app/course/model/course_model.dart';
 import 'package:c_app/pages/VideoPlayer/VideoPlayerScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

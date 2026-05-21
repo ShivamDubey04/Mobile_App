@@ -20,7 +20,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
     videoPlayerController = VideoPlayerController.networkUrl(
       Uri.parse(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+        'assests/abc.mp4',
       ),
     );
 
